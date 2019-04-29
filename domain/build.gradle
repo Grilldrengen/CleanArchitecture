@@ -1,0 +1,12 @@
+apply plugin: 'java-library'
+
+apply plugin: 'org.jetbrains.kotlin.jvm'
+
+dependencies {
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"
