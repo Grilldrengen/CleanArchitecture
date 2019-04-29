@@ -5,34 +5,45 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import grillnielsen.dk.cleanarchitecture.framework.FakeLocationSource
 import grillnielsen.dk.cleanarchitecture.framework.InMemoryLocationPersistenceSource
-import grillnielsen.dk.cleanarchitecture.framework.LocationRoomDatabase
 import grillnielsen.dk.data.LocationsRepository
+import grillnielsen.dk.domain.Location as DomainLocation
 import grillnielsen.dk.usecases.GetLocations
 import grillnielsen.dk.usecases.RequestNewLocation
-import grillnielsen.dk.domain.Location
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(private var view: View?, private val getLocations: GetLocations, private val requestNewLocation: RequestNewLocation) : ViewModel() {
 
-    private val getLocations: GetLocations
-    private val requestNewLocation: RequestNewLocation
+    private var parentJob = Job()
+    private val coroutineContext: CoroutineContext
+        get() = parentJob + Dispatchers.Main
 
-    init {
-        val locationDao = LocationRoomDatabase.getDatabase(application).locationDao()
-        val persistence = InMemoryLocationPersistenceSource(locationDao)
-        val deviceLocation = FakeLocationSource()
-        val locationsRepository = LocationsRepository(persistence, deviceLocation)
+    private val scope = CoroutineScope(coroutineContext)
 
-        getLocations = GetLocations(locationsRepository)
-        requestNewLocation = RequestNewLocation(locationsRepository)
+    fun onCreate() = scope.launch(Dispatchers.Main) {
+
+        val locations = {
+            getLocations.locations()
+        }
+
+        view?.renderLocations(locations.invoke())
     }
 
-    val locations = runBlocking(Dispatchers.Main) {
-        getLocations.locations()
+    fun newLocationClicked() = scope.launch(Dispatchers.Main) {
+
+        val locations = {
+            requestNewLocation.newLocation()
+        }
+
+        view?.renderLocations(locations.invoke())
     }
 
-    val newLocation = runBlocking(Dispatchers.Main) {
-        requestNewLocation.newLocation()
+    fun onDestroy() {
+        parentJob.cancel()
+        view = null
     }
+}
+
+interface View {
+    fun renderLocations(locations: List<DomainLocation>)
 }

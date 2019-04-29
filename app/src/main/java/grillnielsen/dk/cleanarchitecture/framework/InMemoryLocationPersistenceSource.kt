@@ -1,14 +1,15 @@
 package grillnielsen.dk.cleanarchitecture.framework
 
-import grillnielsen.dk.cleanarchitecture.framework.dao.LocationDao
 import grillnielsen.dk.data.LocationPersistenceSource
 import grillnielsen.dk.domain.Location
 
-class InMemoryLocationPersistenceSource(private val locationDao: LocationDao): LocationPersistenceSource {
+class InMemoryLocationPersistenceSource: LocationPersistenceSource {
 
-    override fun getPersistedLocations(): List<Location> = locationDao.getPersistedLocations()
+    private var locations: List<Location> = emptyList()
+
+    override fun getPersistedLocations(): List<Location> = locations
 
     override fun saveNewLocation(location: Location) {
-        locationDao.saveNewLocation(location)
+        locations += location
     }
 }
