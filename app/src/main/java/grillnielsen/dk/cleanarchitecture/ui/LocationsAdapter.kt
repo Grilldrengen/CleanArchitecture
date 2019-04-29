@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import grillnielsen.dk.cleanarchitecture.R
 import kotlinx.android.synthetic.main.view_location_item.view.*
-import grillnielsen.dk.domain.Location
+import grillnielsen.dk.domain.Location as DomainLocation
 
 class LocationsAdapter : RecyclerView.Adapter<LocationsAdapter.Holder>() {
 
-    private var locations = emptyList<Location>()
+    private var locations = emptyList<DomainLocation>()
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val itemData = locations[position]
@@ -24,17 +24,17 @@ class LocationsAdapter : RecyclerView.Adapter<LocationsAdapter.Holder>() {
 
     override fun getItemCount() = locations.size
 
-    internal fun setLocations(locations: List<Location>) {
+    internal fun setLocations(locations: List<DomainLocation>) {
         this.locations = locations
         notifyDataSetChanged()
     }
 
     inner class Holder(private var view: View) : RecyclerView.ViewHolder(view) {
 
-        private var holderData: Location? = null
+        private var holderData: DomainLocation? = null
 
         @SuppressLint("SetTextI18n")
-        fun bind(holderData: Location) {
+        fun bind(holderData: DomainLocation) {
             this.holderData = holderData
             view.locationCoordinates.text = holderData.latitude.toString() + " " + holderData.longitude.toString()
             view.locationDate.text = holderData.date.toString()

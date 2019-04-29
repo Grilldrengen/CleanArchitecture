@@ -1,12 +1,12 @@
 package grillnielsen.dk.data
 
-import grillnielsen.dk.domain.Location
+import grillnielsen.dk.domain.Location as DomainLocation
 
 class LocationsRepository(private val locationPersistenceSource: LocationPersistenceSource, private val deviceLocationSource: DeviceLocationSource) {
 
-    fun getSavedLocations(): List<Location> = locationPersistenceSource.getPersistedLocations()
+    fun getSavedLocations(): List<DomainLocation> = locationPersistenceSource.getPersistedLocations()
 
-    fun requestNewLocation(): List<Location> {
+    fun requestNewLocation(): List<DomainLocation> {
         val newLocation = deviceLocationSource.getDeviceLocation()
         locationPersistenceSource.saveNewLocation(newLocation)
         return getSavedLocations()
@@ -15,11 +15,11 @@ class LocationsRepository(private val locationPersistenceSource: LocationPersist
 
 interface LocationPersistenceSource {
 
-    fun getPersistedLocations(): List<Location>
-    fun saveNewLocation(location: Location)
+    fun getPersistedLocations(): List<DomainLocation>
+    fun saveNewLocation(location: DomainLocation)
 }
 
 interface DeviceLocationSource {
 
-    fun getDeviceLocation(): Location
+    fun getDeviceLocation(): DomainLocation
 }

@@ -11,7 +11,7 @@ import grillnielsen.dk.cleanarchitecture.framework.FakeLocationSource
 import grillnielsen.dk.cleanarchitecture.framework.InMemoryLocationPersistenceSource
 import grillnielsen.dk.data.LocationsRepository
 import kotlinx.android.synthetic.main.activity_main.*
-import grillnielsen.dk.domain.Location
+import grillnielsen.dk.domain.Location as DomainLocation
 import grillnielsen.dk.usecases.GetLocations
 import grillnielsen.dk.usecases.RequestNewLocation
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), View {
         }
     }
 
-    override fun renderLocations(locations: List<Location>) {
+    override fun renderLocations(locations: List<DomainLocation>) {
         adapter.setLocations(locations)
     }
 
