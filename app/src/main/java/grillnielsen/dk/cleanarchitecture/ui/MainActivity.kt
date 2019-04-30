@@ -2,32 +2,31 @@ package grillnielsen.dk.cleanarchitecture.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import grillnielsen.dk.cleanarchitecture.R
-import grillnielsen.dk.cleanarchitecture.framework.FakeLocationSource
-import grillnielsen.dk.cleanarchitecture.framework.InMemoryLocationPersistenceSource
-import grillnielsen.dk.data.LocationsRepository
+import grillnielsen.dk.cleanarchitecture.framework.FakeNameSource
+import grillnielsen.dk.cleanarchitecture.framework.InMemoryNamePersistenceSource
+import grillnielsen.dk.data.NamesRepository
 import kotlinx.android.synthetic.main.activity_main.*
-import grillnielsen.dk.domain.Location as DomainLocation
-import grillnielsen.dk.usecases.GetLocations
-import grillnielsen.dk.usecases.RequestNewLocation
+import grillnielsen.dk.domain.Name as DomainName
+import grillnielsen.dk.usecases.GetNames
+import grillnielsen.dk.usecases.RequestNewName
 
 class MainActivity : AppCompatActivity(), View {
 
-    private val adapter: LocationsAdapter = LocationsAdapter()
+    private val adapter: NamesAdapter = NamesAdapter()
     private val viewModel: MainViewModel
 
     init {
-        val persistence = InMemoryLocationPersistenceSource()
-        val deviceLocation = FakeLocationSource()
-        val locationsRepository = LocationsRepository(persistence, deviceLocation)
+        val persistence = InMemoryNamePersistenceSource()
+        val deviceName = FakeNameSource(persistence)
+        val namesRepository = NamesRepository(persistence, deviceName)
         viewModel = MainViewModel(
             this,
-            GetLocations(locationsRepository),
-            RequestNewLocation(locationsRepository)
+            GetNames(namesRepository),
+            RequestNewName(namesRepository)
         )
     }
 
@@ -42,14 +41,14 @@ class MainActivity : AppCompatActivity(), View {
 
         viewModel.onCreate()
 
-        newLocationBtn.setOnClickListener {
+        newNameBtn.setOnClickListener {
 
-            viewModel.newLocationClicked()
+            viewModel.newNameClicked()
         }
     }
 
-    override fun renderLocations(locations: List<DomainLocation>) {
-        adapter.setLocations(locations)
+    override fun renderNames(names: List<DomainName>) {
+        adapter.setNames(names)
     }
 
     override fun onDestroy() {

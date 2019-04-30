@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">Clean Architecture</string>
-    <string name="request_new_location">Request new location</string>
-    <string name="permission_read_explanation">Needed to get your current location</string>
-    <string name="ok">OK</string>
+    <string name="request_new_name">Generate new name</string>
 </resources>

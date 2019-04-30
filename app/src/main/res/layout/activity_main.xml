@@ -12,14 +12,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            tools:listitem="@layout/view_location_item"/>
+            tools:listitem="@layout/view_name_item"/>
 
     <Button
-            android:id="@+id/newLocationBtn"
+            android:id="@+id/newNameBtn"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/request_new_location"/>
+            android:text="@string/request_new_name"/>
 
 </LinearLayout>

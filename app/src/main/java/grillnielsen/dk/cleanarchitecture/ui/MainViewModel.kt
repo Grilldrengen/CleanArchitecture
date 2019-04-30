@@ -1,18 +1,13 @@
 package grillnielsen.dk.cleanarchitecture.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import grillnielsen.dk.cleanarchitecture.framework.FakeLocationSource
-import grillnielsen.dk.cleanarchitecture.framework.InMemoryLocationPersistenceSource
-import grillnielsen.dk.data.LocationsRepository
-import grillnielsen.dk.domain.Location as DomainLocation
-import grillnielsen.dk.usecases.GetLocations
-import grillnielsen.dk.usecases.RequestNewLocation
+import grillnielsen.dk.domain.Name as DomainName
+import grillnielsen.dk.usecases.GetNames
+import grillnielsen.dk.usecases.RequestNewName
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class MainViewModel(private var view: View?, private val getLocations: GetLocations, private val requestNewLocation: RequestNewLocation) : ViewModel() {
+class MainViewModel(private var view: View?, private val getNames: GetNames, private val requestNewName: RequestNewName) : ViewModel() {
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -22,20 +17,20 @@ class MainViewModel(private var view: View?, private val getLocations: GetLocati
 
     fun onCreate() = scope.launch(Dispatchers.Main) {
 
-        val locations = {
-            getLocations.locations()
+        val names = {
+            getNames.names()
         }
 
-        view?.renderLocations(locations.invoke())
+        view?.renderNames(names.invoke())
     }
 
-    fun newLocationClicked() = scope.launch(Dispatchers.Main) {
+    fun newNameClicked() = scope.launch(Dispatchers.Main) {
 
-        val locations = {
-            requestNewLocation.newLocation()
+        val names = {
+            requestNewName.newName()
         }
 
-        view?.renderLocations(locations.invoke())
+        view?.renderNames(names.invoke())
     }
 
     fun onDestroy() {
@@ -45,5 +40,5 @@ class MainViewModel(private var view: View?, private val getLocations: GetLocati
 }
 
 interface View {
-    fun renderLocations(locations: List<DomainLocation>)
+    fun renderNames(names: List<DomainName>)
 }
